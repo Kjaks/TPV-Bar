@@ -1,20 +1,31 @@
 package application;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 
 public class ProductCell extends ListCell<Product> {
-	MainSceneController controller = new MainSceneController();
-	
+	// Here did a singleton so i can access to the totalPrice of the instance
+    MainSceneController controller = MainSceneController.getInstance();
+    
+    // Adding buttons to the cell where we see each product
     private HBox hbox = new HBox();
     private Button addButton = new Button("+");
     private Button removeButton = new Button("-");
-
+    
     public ProductCell() {
+    	
+    	// Setting styles
+    	addButton.setStyle("-fx-background-color: transparent; -fx-font-size: 30px; -fx-font-weight: bold; -fx-cursor: hand;");
+        removeButton.setStyle("-fx-background-color: transparent; -fx-font-size: 30px; -fx-font-weight: bold; -fx-cursor: hand;");
+
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setSpacing(20);
+        hbox.getChildren().addAll(addButton, removeButton);
+        
+        // Add the addButton and the logic, increase in 1 unit the product and updates price
         addButton.setOnAction(event -> {
             Product product = getItem();
             if (product != null) {
@@ -26,6 +37,7 @@ public class ProductCell extends ListCell<Product> {
             }
         });
 
+        // Add the removeButton and the logic, decrease in 1 unit and updates price
         removeButton.setOnAction(event -> {
             Product product = getItem();
             if (product != null) {
@@ -33,18 +45,18 @@ public class ProductCell extends ListCell<Product> {
 
                 if (product.getQuantity() == 0) {
                     getListView().getItems().remove(product);
+                    controller.updateTotalPrice(-(product.getPrice()));
                 } else {
-                    controller.updateTotalPrice(2.0);
+                    controller.updateTotalPrice(-(product.getPrice()));
                     
                     updateItem(product, isEmpty());
                 }
             }
         });
 
-
-        hbox.getChildren().addAll(addButton, removeButton);
     }
 
+    // This updates the item and we can see his values;
     protected void updateItem(Product product, boolean empty) {
         super.updateItem(product, empty);
 
@@ -52,7 +64,8 @@ public class ProductCell extends ListCell<Product> {
             setText(null);
             setGraphic(null);
         } else {
-            Label productInfo = new Label(product.getName() + " - Cantidad: " + product.getQuantity());
+            Label productInfo = new Label(product.getName() + "   " + product.getQuantity() + "   " + String.format("%.2f", Math.abs(product.getTotal())) + "€");
+            productInfo.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
             hbox.getChildren().setAll(productInfo, addButton, removeButton);
             setGraphic(hbox);
         }

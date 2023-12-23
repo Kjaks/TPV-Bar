@@ -4,12 +4,14 @@ public class Product {
     private String name;
     private double price;
     private int quantity;
+    private double total;
 
     // Constructor
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
         this.quantity = 0; // The default quantity of product is 0
+        this.total = 0;
     }
 
     // Getters and setters
@@ -37,13 +39,24 @@ public class Product {
 		this.quantity = quantity;
 	}
 	
-    public void increaseQuantity() {
+    public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	public void increaseQuantity() {
         this.quantity += 1;
+        this.total += this.price;
     }
     
     public void decreaseQuantity() {
-        if(this.quantity >= 1) this.quantity -= 1;
+        this.quantity -= 1;
+        this.total -= this.price;
     }
+    
 
 }
 
