@@ -11,5 +11,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/kjaks/Downloads/pdfbox-app-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
